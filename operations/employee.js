@@ -7,7 +7,15 @@ function getAllEmployees() {
         return reject(err);
       }
       
-      connection.query('SELECT * FROM employee', (queryError, results) => {
+      const query = `
+        SELECT e.id, e.first_name, e.last_name, r.title AS role, 
+               CONCAT(m.first_name, ' ', m.last_name) AS manager
+        FROM employee e
+        LEFT JOIN role r ON e.role_id = r.id
+        LEFT JOIN employee m ON e.manager_id = m.id
+      `;
+
+      connection.query(query, (queryError, results) => {
         connection.release();
         
         if (queryError) {

@@ -6,8 +6,14 @@ function getAllRoles() {
       if (err) {
         return reject(err);
       }
+
+      const query = `
+        SELECT role.id, role.title, role.salary, department.name AS department
+        FROM role
+        LEFT JOIN department ON role.department_id = department.id
+      `;
       
-      connection.query('SELECT * FROM role', (queryError, results) => {
+      connection.query(query, (queryError, results) => {
         connection.release();
         
         if (queryError) {
