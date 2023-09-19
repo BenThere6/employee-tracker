@@ -27,6 +27,9 @@ function startApp() {
                 case 'View departments':
                     try {
                         const departments = await department.getAllDepartments();
+                        const formattedDepartments = departments.map((dept) => {
+                            return { 'ID': dept.id, 'Name': dept.name };
+                        });
                         console.log('Departments:');
                         console.table(departments);
                     } catch (error) {
@@ -35,7 +38,13 @@ function startApp() {
                     startApp();
                     break;
                 case 'View roles':
-                    const roles = role.getAllRows();
+                    try {
+                        const roles = await role.getAllRoles();
+                        console.log('Roles:');
+                        console.table(roles);
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
                     startApp();
                     break;
                 case 'View employees':
