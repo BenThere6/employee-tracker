@@ -2,6 +2,7 @@ const inquirer = require('inquirer');
 const department = require('./operations/department');
 const role = require('./operations/role');
 const employee = require('./operations/employee');
+const table = require('./display_table');
 
 function startApp() {
     inquirer
@@ -27,11 +28,8 @@ function startApp() {
                 case 'View departments':
                     try {
                         const departments = await department.getAllDepartments();
-                        const formattedDepartments = departments.map((dept) => {
-                            return { 'ID': dept.id, 'Name': dept.name };
-                        });
                         console.log('Departments:');
-                        console.table(departments);
+                        table.table(departments)
                     } catch (error) {
                         console.error('Error:', error);
                     }
