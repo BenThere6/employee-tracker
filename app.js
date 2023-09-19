@@ -25,18 +25,34 @@ function startApp() {
         .then(async (answer) => {
             switch (answer.action) {
                 case 'View departments':
+                    try {
+                        const departments = await department.getAllDepartments();
+                        console.log('Departments:');
+                        console.table(departments);
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                    startApp();
                     break;
                 case 'View roles':
+                    const roles = role.getAllRows();
+                    startApp();
                     break;
                 case 'View employees':
+                    const employees = employee.getAllEmployees();
+                    startApp();
                     break;
                 case 'Add department':
+                    startApp();
                     break;
                 case 'Add role':
+                    startApp();
                     break;
                 case 'Add employee':
+                    startApp();
                     break;
                 case 'Update employee role':
+                    startApp();
                     break;
                 case 'Exit':
                     console.log('Goodbye!');
@@ -44,6 +60,7 @@ function startApp() {
                 default:
                     console.log('Invalid action. Please try again.');
                     startApp();
+                    break;
             }
         })
 }
