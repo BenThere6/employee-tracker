@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const department = require('./operations/department');
 const role = require('./operations/role');
 const employee = require('./operations/employee');
-const table = require('./display_table');
+const table = require('./table');
 
 function startApp() {
     inquirer
@@ -29,7 +29,7 @@ function startApp() {
                     try {
                         const departments = await department.getAllDepartments();
                         console.log('Departments:');
-                        table.table(departments)
+                        table.display(departments)
                     } catch (error) {
                         console.error('Error:', error);
                     }
@@ -39,14 +39,20 @@ function startApp() {
                     try {
                         const roles = await role.getAllRoles();
                         console.log('Roles:');
-                        console.table(roles);
+                        table.display(roles);
                     } catch (error) {
                         console.error('Error:', error);
                     }
                     startApp();
                     break;
                 case 'View employees':
-                    const employees = employee.getAllEmployees();
+                    try {
+                        const employees = await employee.getAllEmployees();
+                        console.log('Employees:');
+                        table.display(employees);
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
                     startApp();
                     break;
                 case 'Add department':
