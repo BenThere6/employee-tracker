@@ -1,15 +1,46 @@
-const db = require('../db');
+const pool = require('../db');
 
-async function getAllDepartments() {
-    const [rows] = await db.query('SELECT * FROM department')
-    return rows
+function getAllDepartments() {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      connection.query('SELECT * FROM department', (queryError, results) => {
+        connection.release();
+        
+        if (queryError) {
+          return reject(queryError);
+        }
+        
+        resolve(results);
+      });
+    });
+  });
 }
 
-async function addDepartment(name) {
-    await db.query('INSERT INTO department (name) VALUES (?)', [name]);
+function addDepartment(name) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      connection.query('INSERT INTO department (name) VALUES (?)', [name], (queryError, results) => {
+        connection.release();
+        
+        if (queryError) {
+          return reject(queryError);
+        }
+        
+        resolve(results);
+      });
+    });
+  });
 }
 
 module.exports = {
-    getAllDepartments,
-    addDepartment
-}
+  getAllDepartments,
+  addDepartment,
+};

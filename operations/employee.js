@@ -1,15 +1,46 @@
-const db = require('../db');
+const pool = require('../db');
 
-async function getAllEmployees() {
-    const [rows] = await db.query('SELECT * FROM employee')
-    return rows
+function getAllEmployees() {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      connection.query('SELECT * FROM employee', (queryError, results) => {
+        connection.release();
+        
+        if (queryError) {
+          return reject(queryError);
+        }
+        
+        resolve(results);
+      });
+    });
+  });
 }
 
-async function addEmployee(name) {
-    await db.query('INSERT INTO employee (name) VALUES (?)', [name]);
+function addEmployee(name) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      connection.query('INSERT INTO employee (name) VALUES (?)', [name], (queryError, results) => {
+        connection.release();
+        
+        if (queryError) {
+          return reject(queryError);
+        }
+        
+        resolve(results);
+      });
+    });
+  });
 }
 
 module.exports = {
-    getAllEmployees,
-    addEmployee
-}
+  getAllEmployees,
+  addEmployee,
+};

@@ -1,15 +1,46 @@
-const db = require('../db');
+const pool = require('../db');
 
-async function getAllRoles() {
-    const [rows] = await db.query('SELECT * FROM role')
-    return rows
+function getAllRoles() {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      connection.query('SELECT * FROM role', (queryError, results) => {
+        connection.release();
+        
+        if (queryError) {
+          return reject(queryError);
+        }
+        
+        resolve(results);
+      });
+    });
+  });
 }
 
-async function addRole(name) {
-    await db.query('INSERT INTO role (name) VALUES (?)', [name]);
+function addRole(name) {
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, connection) => {
+      if (err) {
+        return reject(err);
+      }
+      
+      connection.query('INSERT INTO role (name) VALUES (?)', [name], (queryError, results) => {
+        connection.release();
+        
+        if (queryError) {
+          return reject(queryError);
+        }
+        
+        resolve(results);
+      });
+    });
+  });
 }
 
 module.exports = {
-    getAllRoles,
-    addRole
-}
+  getAllRoles,
+  addRole,
+};
