@@ -3,7 +3,7 @@
 const { Console } = require('console');
 const { Transform } = require('stream');
 
-function table(input) {
+function display(input) {
   const ts = new Transform({ transform(chunk, enc, cb) { cb(null, chunk) } })
   const logger = new Console({ stdout: ts })
   logger.table(input)
@@ -21,4 +21,4 @@ function table(input) {
   }
 }
 
-module.exports = { table };
+module.exports = { display };
