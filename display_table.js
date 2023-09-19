@@ -21,3 +21,4 @@ function table(input) {
   }
 }
 
+module.exports = { table };
