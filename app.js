@@ -2,7 +2,7 @@ const inquirer = require('inquirer');
 const department = require('./operations/department');
 const role = require('./operations/role');
 const employee = require('./operations/employee');
-const table = require('./table');
+const table = require('./tools/table');
 
 function startApp() {
     inquirer

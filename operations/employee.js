@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../tools/db');
 
 function getAllEmployees() {
   return new Promise((resolve, reject) => {
