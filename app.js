@@ -79,65 +79,133 @@ function startApp() {
                         startApp();
                     });
                     break;
-                    case 'Add role':
-                        department.getAllDepartments()
-                            .then((departments) => {
-                                const departmentChoices = departments.map((dept) => dept.name);
-                                
-                                inquirer.prompt([
-                                    {
-                                        type: 'input',
-                                        name: 'roleName',
-                                        message: 'Enter the name of the new role:',
-                                        validate: (input) => {
-                                            if (input.trim() === '') {
-                                                return 'Role name cannot be empty.';
-                                            }
-                                            return true;
+                case 'Add role':
+                    department.getAllDepartments()
+                        .then((departments) => {
+                            const departmentChoices = departments.map((dept) => dept.name);
+                            
+                            inquirer.prompt([
+                                {
+                                    type: 'input',
+                                    name: 'roleName',
+                                    message: 'Enter the name of the new role:',
+                                    validate: (input) => {
+                                        if (input.trim() === '') {
+                                            return 'Role name cannot be empty.';
                                         }
-                                    },
-                                    {
-                                        type: 'input',
-                                        name: 'salary',
-                                        message: 'Enter the salary:',
-                                        validate: (input) => {
-                                            if (input.trim() === '') {
-                                                return 'Salary cannot be empty.';
-                                            }
-                                            return true;
+                                        return true;
+                                    }
+                                },
+                                {
+                                    type: 'input',
+                                    name: 'salary',
+                                    message: 'Enter the salary:',
+                                    validate: (input) => {
+                                        if (input.trim() === '') {
+                                            return 'Salary cannot be empty.';
                                         }
-                                    },
-                                    {
-                                        type: 'list',
-                                        name: 'dept',
-                                        message: 'Which department does the role belong to?',
-                                        choices: departmentChoices 
+                                        return true;
                                     }
-                                ]).then(async (answers) => {
-                                    try {
-                                        const roleName = answers.roleName;
-                                        const salary = answers.salary;
-                                        const departmentName = answers.dept;
-                                        
-                                        const selectedDepartment = departments.find((dept) => dept.name === departmentName);
-                                        const departmentId = selectedDepartment ? selectedDepartment.id : null;
-                                        
-                                        await role.addRole(roleName, salary, departmentId);
-                                        
-                                        console.log(`Role '${roleName}' added successfully.`);
-                                    } catch (error) {
-                                        console.error('Error:', error);
-                                    }
-                                    startApp();
-                                });
-                            })
-                            .catch((error) => {
-                                console.error('Error fetching departments:', error);
+                                },
+                                {
+                                    type: 'list',
+                                    name: 'dept',
+                                    message: 'Which department does the role belong to?',
+                                    choices: departmentChoices 
+                                }
+                            ]).then(async (answers) => {
+                                try {
+                                    const roleName = answers.roleName;
+                                    const salary = answers.salary;
+                                    const departmentName = answers.dept;
+                                    
+                                    const selectedDepartment = departments.find((dept) => dept.name === departmentName);
+                                    const departmentId = selectedDepartment ? selectedDepartment.id : null;
+                                    
+                                    await role.addRole(roleName, salary, departmentId);
+                                    
+                                    console.log(`Role '${roleName}' added successfully.`);
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                }
                                 startApp();
                             });
-                        break;
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching departments:', error);
+                            startApp();
+                        });
+                    break;
                 case 'Add employee':
-                    startApp();
+                    Promise.all([role.getAllRoles(), employee.getAllEmployees()])
+                        .then(([roles, employees]) => {
+                            const roleChoices = roles.map((r) => r.title);
+                            const managerChoices = employees.map((e) => `${e.first_name} ${e.last_name}`);
+                
+                            inquirer.prompt([
+                                {
+                                    type: 'input',
+                                    name: 'firstName',
+                                    message: 'Enter the first name of the new employee:',
+                                    validate: (input) => {
+                                        if (input.trim() === '') {
+                                            return 'First name cannot be empty.';
+                                        }
+                                        return true;
+                                    }
+                                },
+                                {
+                                    type: 'input',
+                                    name: 'lastName',
+                                    message: 'Enter the last name of the new employee:',
+                                    validate: (input) => {
+                                        if (input.trim() === '') {
+                                            return 'Last name cannot be empty.';
+                                        }
+                                        return true;
+                                    }
+                                },
+                                {
+                                    type: 'list',
+                                    name: 'role',
+                                    message: 'Select the role for the new employee:',
+                                    choices: roleChoices
+                                },
+                                {
+                                    type: 'list',
+                                    name: 'manager',
+                                    message: 'Select the manager for the new employee (if any):',
+                                    choices: ['None', ...managerChoices]
+                                }
+                            ]).then(async (answers) => {
+                                try {
+                                    const firstName = answers.firstName;
+                                    const lastName = answers.lastName;
+                                    const roleName = answers.role;
+                                    const managerName = answers.manager;
+                
+                                    const selectedRole = roles.find((r) => r.title === roleName);
+                                    const roleId = selectedRole ? selectedRole.id : null;
+                
+                                    let managerId = null;
+                                    if (managerName !== 'None') {
+                                        const selectedManager = employees.find((e) => `${e.first_name} ${e.last_name}` === managerName);
+                                        managerId = selectedManager ? selectedManager.id : null;
+                                    }
+                
+                                    await employee.addEmployee(firstName, lastName, roleId, managerId);
+                
+                                    console.log(`Employee '${firstName} ${lastName}' added successfully.`);
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                }
+                                startApp();
+                            });
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching roles and employees:', error);
+                            startApp();
+                        });
                     break;
                 case 'Update employee role':
                     startApp();
