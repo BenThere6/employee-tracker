@@ -3,6 +3,7 @@ const department = require('./operations/department');
 const role = require('./operations/role');
 const employee = require('./operations/employee');
 const table = require('./tools/table');
+const init_tables = require('./tools/init')
 
 function startApp() {
     inquirer
@@ -268,4 +269,5 @@ function startApp() {
         })
 }
 
+init_tables.createTablesIfNotExist();
 startApp();
