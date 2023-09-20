@@ -1,5 +1,12 @@
 const pool = require('../tools/db');
 
+const createDepartmentTableSQL = `
+  CREATE TABLE IF NOT EXISTS department (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+  );
+`;
+
 const createRoleTableSQL = `
   CREATE TABLE IF NOT EXISTS role (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -7,13 +14,6 @@ const createRoleTableSQL = `
     salary DECIMAL(10, 2) NOT NULL,
     department_id INT,
     FOREIGN KEY (department_id) REFERENCES department(id)
-  );
-`;
-
-const createDepartmentTableSQL = `
-  CREATE TABLE IF NOT EXISTS department (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
   );
 `;
 
