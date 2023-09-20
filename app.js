@@ -12,13 +12,13 @@ function startApp() {
                 name: 'action',
                 message: 'Choose an action:',
                 choices: [
-                    'View departments',
-                    'Add department',
-                    'View roles',
-                    'Add role',
-                    'Update employee role',
                     'View employees',
                     'Add employee',
+                    'Update employee role',
+                    'View roles',
+                    'Add role',
+                    'View departments',
+                    'Add department',
                     'Exit'
                 ]
             }
