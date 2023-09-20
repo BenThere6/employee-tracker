@@ -35,7 +35,10 @@ function addEmployee(name) {
         return reject(err);
       }
       
-      connection.query('INSERT INTO employee (name) VALUES (?)', [name], (queryError, results) => {
+      const sql = 'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)';
+      const values = [firstName, lastName, roleId, managerId];
+      
+      connection.query(sql, values, (queryError, results) => {
         connection.release();
         
         if (queryError) {
