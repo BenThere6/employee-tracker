@@ -79,9 +79,63 @@ function startApp() {
                         startApp();
                     });
                     break;
-                case 'Add role':
-                    startApp();
-                    break;
+                    case 'Add role':
+                        department.getAllDepartments()
+                            .then((departments) => {
+                                const departmentChoices = departments.map((dept) => dept.name);
+                                
+                                inquirer.prompt([
+                                    {
+                                        type: 'input',
+                                        name: 'roleName',
+                                        message: 'Enter the name of the new role:',
+                                        validate: (input) => {
+                                            if (input.trim() === '') {
+                                                return 'Role name cannot be empty.';
+                                            }
+                                            return true;
+                                        }
+                                    },
+                                    {
+                                        type: 'input',
+                                        name: 'salary',
+                                        message: 'Enter the salary:',
+                                        validate: (input) => {
+                                            if (input.trim() === '') {
+                                                return 'Salary cannot be empty.';
+                                            }
+                                            return true;
+                                        }
+                                    },
+                                    {
+                                        type: 'list',
+                                        name: 'dept',
+                                        message: 'Which department does the role belong to?',
+                                        choices: departmentChoices 
+                                    }
+                                ]).then(async (answers) => {
+                                    try {
+                                        const roleName = answers.roleName;
+                                        const salary = answers.salary;
+                                        const departmentName = answers.dept;
+                                        
+                                        const selectedDepartment = departments.find((dept) => dept.name === departmentName);
+                                        const departmentId = selectedDepartment ? selectedDepartment.id : null;
+                                        
+                                        await role.addRole(roleName, salary, departmentId);
+                                        
+                                        console.log(`Role '${roleName}' added successfully.`);
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                    }
+                                    startApp();
+                                });
+                            })
+                            .catch((error) => {
+                                console.error('Error fetching departments:', error);
+                                startApp();
+                            });
+                        break;
                 case 'Add employee':
                     startApp();
                     break;
