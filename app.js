@@ -13,12 +13,12 @@ function startApp() {
                 message: 'Choose an action:',
                 choices: [
                     'View departments',
-                    'View roles',
-                    'View employees',
                     'Add department',
+                    'View roles',
                     'Add role',
-                    'Add employee',
                     'Update employee role',
+                    'View employees',
+                    'Add employee',
                     'Exit'
                 ]
             }
@@ -56,6 +56,27 @@ function startApp() {
                     startApp();
                     break;
                 case 'Add department':
+                    inquirer.prompt([
+                        {
+                            type: 'input',
+                            name: 'departmentName',
+                            message: 'Enter the name of the new department:',
+                            validate: (input) => {
+                                if (input.trim() === '') {
+                                    return 'Department name cannot be empty.';
+                                }
+                                return true;
+                            }
+                        }
+                    ]).then(async (answers) => {
+                        try {
+                            const departmentName = answers.departmentName;
+                            await department.addDepartment(departmentName);
+                            console.log(`Department '${departmentName}' added successfully.`);
+                        } catch (error) {
+                            console.error('Error:', error);
+                        }
+                    });
                     startApp();
                     break;
                 case 'Add role':
