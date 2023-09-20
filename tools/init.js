@@ -1,4 +1,4 @@
-const pool = require('../db');
+const pool = require('../tools/db');
 
 const createRoleTableSQL = `
   CREATE TABLE IF NOT EXISTS role (
@@ -31,13 +31,18 @@ const createEmployeeTableSQL = `
 
 async function createTablesIfNotExist() {
   try {
-    await pool.query(createDepartmentTableSQL);
-    await pool.query(createRoleTableSQL);
-    await pool.query(createEmployeeTableSQL);
+    const connection = await pool.getConnection();
+    
+    await connection.promise().query(createDepartmentTableSQL);
+    await connection.promise().query(createRoleTableSQL);
+    await connection.promise().query(createEmployeeTableSQL);
+
+    connection.release();
+    
     console.log('Tables created successfully (if they did not exist).');
   } catch (error) {
     console.error('Error creating tables:', error);
   }
 }
 
-createTablesIfNotExist();
+module.exports = { createTablesIfNotExist };
