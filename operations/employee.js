@@ -52,7 +52,31 @@ function addEmployee(firstName, lastName, roleId, managerId) {
   });
 }
 
+function updateEmployeeRole(employeeId, newRoleId) {
+    return new Promise((resolve, reject) => {
+      pool.getConnection((err, connection) => {
+        if (err) {
+          return reject(err);
+        }
+        
+        const sql = 'UPDATE employee SET role_id = ? WHERE id = ?';
+        const values = [newRoleId, employeeId];
+        
+        connection.query(sql, values, (queryError, results) => {
+          connection.release();
+          
+          if (queryError) {
+            return reject(queryError);
+          }
+          
+          resolve(results);
+        });
+      });
+    });
+  }
+
 module.exports = {
   getAllEmployees,
   addEmployee,
+  updateEmployeeRole
 };
