@@ -1,4 +1,5 @@
 const pool = require('../tools/db');
+const util = require('util');
 
 const createDepartmentTableSQL = `
   CREATE TABLE IF NOT EXISTS department (
@@ -29,16 +30,14 @@ const createEmployeeTableSQL = `
   );
 `;
 
+const query = util.promisify(pool.query).bind(pool);
+
 async function createTablesIfNotExist() {
   try {
-    const connection = await pool.getConnection();
-    
-    await connection.promise().query(createDepartmentTableSQL);
-    await connection.promise().query(createRoleTableSQL);
-    await connection.promise().query(createEmployeeTableSQL);
+    await query(createDepartmentTableSQL);
+    await query(createRoleTableSQL);
+    await query(createEmployeeTableSQL);
 
-    connection.release();
-    
     console.log('Tables created successfully (if they did not exist).');
   } catch (error) {
     console.error('Error creating tables:', error);
