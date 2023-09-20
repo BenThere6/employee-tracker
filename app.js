@@ -76,8 +76,8 @@ function startApp() {
                         } catch (error) {
                             console.error('Error:', error);
                         }
+                        startApp();
                     });
-                    startApp();
                     break;
                 case 'Add role':
                     startApp();
