@@ -29,7 +29,7 @@ function getAllEmployees() {
   });
 }
 
-function addEmployee(name) {
+function addEmployee(firstName, lastName, roleId, managerId) {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {

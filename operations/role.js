@@ -26,7 +26,7 @@ function getAllRoles() {
   });
 }
 
-function addRole(name) {
+function addRole(name, salary, departmentId) {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
