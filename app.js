@@ -208,7 +208,54 @@ function startApp() {
                         });
                     break;
                 case 'Update employee role':
-                    startApp();
+                    Promise.all([employee.getAllEmployees(), role.getAllRoles()])
+                        .then(([employees, roles]) => {
+                            const employeeChoices = employees.map((e) => `${e.first_name} ${e.last_name}`);
+                            const roleChoices = roles.map((r) => r.title);
+                            
+                            inquirer.prompt([
+                                {
+                                    type: 'list',
+                                    name: 'employee',
+                                    message: 'Select the employee whose role you want to update:',
+                                    choices: employeeChoices
+                                },
+                                {
+                                    type: 'list',
+                                    name: 'newRole',
+                                    message: 'Select the new role for the employee:',
+                                    choices: roleChoices
+                                }
+                            ]).then(async (answers) => {
+                                try {
+                                    const employeeName = answers.employee;
+                                    const newRoleName = answers.newRole;
+                
+                                    const selectedEmployee = employees.find((e) => `${e.first_name} ${e.last_name}` === employeeName);
+                                    const selectedRole = roles.find((r) => r.title === newRoleName);
+                
+                                    if (!selectedEmployee || !selectedRole) {
+                                        console.log('Invalid employee or role selected.');
+                                        startApp();
+                                        return;
+                                    }
+                
+                                    const employeeId = selectedEmployee.id;
+                                    const newRoleId = selectedRole.id;
+                
+                                    await employee.updateEmployeeRole(employeeId, newRoleId);
+                
+                                    console.log(`Employee '${employeeName}' role updated to '${newRoleName}' successfully.`);
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                }
+                                startApp();
+                            });
+                        })
+                        .catch((error) => {
+                            console.error('Error fetching employees and roles:', error);
+                            startApp();
+                        });
                     break;
                 case 'Exit':
                     console.log('Goodbye!');
