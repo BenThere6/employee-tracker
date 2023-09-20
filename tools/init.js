@@ -38,7 +38,6 @@ async function createTablesIfNotExist() {
     await query(createRoleTableSQL);
     await query(createEmployeeTableSQL);
 
-    console.log('Tables created successfully (if they did not exist).');
   } catch (error) {
     console.error('Error creating tables:', error);
   }
