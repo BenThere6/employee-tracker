@@ -5,8 +5,11 @@ const employee = require('./operations/employee');
 const table = require('./tools/table');
 const init_tables = require('./tools/init')
 
-function startApp() {
-    inquirer
+async function startApp() {
+    try {
+        await init_tables.createTablesIfNotExist();
+
+        inquirer
         .prompt([
             {
                 type: 'list',
@@ -267,7 +270,9 @@ function startApp() {
                     break;
             }
         })
+    } catch (error) {
+        console.error('Error initializing tables:', error);
+    }
 }
 
-init_tables.createTablesIfNotExist();
-startApp();
+startApp()
