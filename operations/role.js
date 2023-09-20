@@ -33,7 +33,10 @@ function addRole(name) {
         return reject(err);
       }
       
-      connection.query('INSERT INTO role (name) VALUES (?)', [name], (queryError, results) => {
+      const sql = 'INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)';
+      const values = [name, salary, departmentId];
+      
+      connection.query(sql, values, (queryError, results) => {
         connection.release();
         
         if (queryError) {
