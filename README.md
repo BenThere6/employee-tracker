@@ -29,6 +29,8 @@ To get started with the Employee Management System, follow these steps:
 4. Create database (tables will be dynamically created)
 5. Run the application using 'node app.js' to start managing employee data.
 
+[Instructional Video](https://drive.google.com/file/d/1HvWtdAmsUosMtsyJ9BOwYmnHBRPLz7ZP/view)
+
 ## Contributing
 
 Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please submit them through GitHub issues.
