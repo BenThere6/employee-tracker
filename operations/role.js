@@ -7,6 +7,7 @@ function getAllRoles() {
         return reject(err);
       }
 
+      // SQL query to select role details along with their associated department.
       const query = `
         SELECT role.id, role.title, role.salary, department.name AS department
         FROM role
@@ -20,6 +21,7 @@ function getAllRoles() {
           return reject(queryError);
         }
         
+        // Resolve with the retrieved role details.
         resolve(results);
       });
     });
@@ -43,6 +45,7 @@ function addRole(name, salary, departmentId) {
           return reject(queryError);
         }
         
+        // Resolve with the result of the insert operation.
         resolve(results);
       });
     });

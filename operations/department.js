@@ -7,6 +7,7 @@ function getAllDepartments() {
         return reject(err);
       }
       
+      // Query the 'department' table to select all departments.
       connection.query('SELECT * FROM department', (queryError, results) => {
         connection.release();
         
@@ -14,6 +15,7 @@ function getAllDepartments() {
           return reject(queryError);
         }
         
+        // Resolve with the retrieved departments.
         resolve(results);
       });
     });
@@ -27,6 +29,7 @@ function addDepartment(name) {
         return reject(err);
       }
       
+      // Insert a new department with the provided name into the 'department' table.
       connection.query('INSERT INTO department (name) VALUES (?)', [name], (queryError, results) => {
         connection.release();
         
@@ -34,6 +37,7 @@ function addDepartment(name) {
           return reject(queryError);
         }
         
+        // Resolve with the result of the insert operation.
         resolve(results);
       });
     });
