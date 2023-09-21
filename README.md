@@ -27,7 +27,7 @@ To get started with the Employee Management System, follow these steps:
 2. Install the required dependencies using 'npm install'.
 3. Configure your MySQL database connection settings in the .env file.
 4. Create database (tables will be dynamically created)
-5. Run the application using node app.js to start managing employee data.
+5. Run the application using 'node app.js' to start managing employee data.
 
 ## Contributing
 
